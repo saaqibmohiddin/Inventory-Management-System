@@ -105,8 +105,6 @@ def export_to_excel():
     total = len(rows)
     total_label.config(text=f"Total Products: {total}")
 def export_to_pdf():
-
-def export_to_pdf():
     doc = SimpleDocTemplate("products.pdf")
 
     data = [["ID", "Name", "Price", "Quantity"]]

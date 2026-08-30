@@ -7,11 +7,11 @@
     {
         "name": "Laptop",
         "price": 50000.0,
-        "quantity": 8
+        "quantity": 10
     },
     {
         "name": "Laptop",
-        "price": 50000.0,
-        "quantity": 10
+        "price": 60000.0,
+        "quantity": 3
     }
 ]

@@ -54,10 +54,28 @@ def add_product():
         price = float(price)
         quantity = int(quantity)
     except ValueError:
-        messagebox.showerror("Error", "Price must be a number and Quantity must be an integer.")
+        messagebox.showerror(
+            "Error",
+            "Price must be a number and Quantity must be an integer."
+        )
         return
 
-    # Paste the cursor.execute() code here
+    # Check invalid values
+    if price <= 0:
+        messagebox.showerror(
+            "Error",
+            "Price must be greater than 0."
+        )
+        return
+
+    if quantity < 0:
+        messagebox.showerror(
+            "Error",
+            "Quantity cannot be negative."
+        )
+        return
+
+    # Add product
     cursor.execute(
         "INSERT INTO products(name, price, quantity) VALUES (?, ?, ?)",
         (name, price, quantity)
@@ -65,7 +83,10 @@ def add_product():
 
     conn.commit()
 
-    messagebox.showinfo("Success", "Product Added Successfully!")
+    messagebox.showinfo(
+        "Success",
+        "Product Added Successfully!"
+    )
 
     name_entry.delete(0, tk.END)
     price_entry.delete(0, tk.END)
@@ -141,8 +162,29 @@ def clear_fields():
     quantity_entry.delete(0, tk.END)
     search_entry.delete(0, tk.END)
     tree.selection_remove(tree.selection())
+    load_products()
+def export_excel():
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Products"
+
+    sheet.append(["ID", "Name", "Price", "Quantity"])
+
+    rows = cursor.execute("SELECT * FROM products").fetchall()
+
+    for row in rows:
+        sheet.append(row)
+
+    workbook.save("products.xlsx")
+
+    messagebox.showinfo(
+        "Success",
+        "Products exported to Excel successfully!"
+    )
 clear_btn = tk.Button(root, text="Clear", command=clear_fields)
 clear_btn.grid(row=3, column=5, padx=10, pady=10)
+export_btn = tk.Button(root, text="Export Excel", command=export_excel)
+export_btn.grid(row=3, column=6, padx=10, pady=10)
 
 # Close the database when the window closes
 add_btn = tk.Button(root, text="Add Product", command=add_product)
